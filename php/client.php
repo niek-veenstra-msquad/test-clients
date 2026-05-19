@@ -25,25 +25,44 @@ if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
 }
 
 $payload = json_encode(['message' => $message], JSON_THROW_ON_ERROR);
-$context = stream_context_create([
-    'http' => [
-        'method' => 'POST',
-        'header' => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\n",
-        'content' => $payload,
-        'ignore_errors' => true,
-        'timeout' => 10,
-    ],
-]);
+$socket = @stream_socket_client(
+    "tcp://{$host}:{$port}",
+    $errorCode,
+    $errorMessage,
+    10
+);
 
-$responseBody = @file_get_contents("http://{$host}:{$port}{$path}", false, $context);
-
-if ($responseBody === false) {
-    $error = error_get_last();
-    fwrite(STDERR, ($error['message'] ?? 'HTTP request failed') . "\n");
+if ($socket === false) {
+    fwrite(STDERR, ($errorMessage !== '' ? $errorMessage : 'HTTP request failed') . "\n");
     exit(1);
 }
 
-$statusLine = $http_response_header[0] ?? 'HTTP/1.1 500 Internal Server Error';
+stream_set_timeout($socket, 10);
+
+$request = implode("\r\n", [
+    "POST {$path} HTTP/1.1",
+    "Host: {$host}:{$port}",
+    'Content-Type: application/json',
+    'Content-Length: ' . strlen($payload),
+    'Connection: close',
+    '',
+    $payload,
+]);
+
+fwrite($socket, $request);
+
+$response = stream_get_contents($socket);
+$metadata = stream_get_meta_data($socket);
+fclose($socket);
+
+if ($response === false || ($metadata['timed_out'] ?? false)) {
+    fwrite(STDERR, "HTTP request failed\n");
+    exit(1);
+}
+
+[$rawHeaders, $responseBody] = array_pad(explode("\r\n\r\n", $response, 2), 2, '');
+$headerLines = explode("\r\n", $rawHeaders);
+$statusLine = $headerLines[0] ?? 'HTTP/1.1 500 Internal Server Error';
 preg_match('/\s(\d{3})\s/', $statusLine, $matches);
 $status = isset($matches[1]) ? (int) $matches[1] : 500;
 
