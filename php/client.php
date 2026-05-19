@@ -66,7 +66,7 @@ while ($bytesWritten < $requestLength) {
 
 $response = '';
 
-while (!feof($socket)) {
+while (true) {
     $chunk = fread($socket, 8192);
 
     if ($chunk === false) {
@@ -106,7 +106,7 @@ if ($headerSeparator === false) {
 
 $rawHeaders = $headerSeparator === false ? '' : substr($response, 0, $headerSeparator);
 $responseBody = $headerSeparator === false ? $response : substr($response, $headerSeparator + $separatorLength);
-$headerLines = preg_split("/\r\n|\n/", $rawHeaders) ?: [];
+$headerLines = $rawHeaders === '' ? [] : (preg_split("/\r\n|\n/", $rawHeaders) ?: []);
 $statusLine = $headerLines[0] ?? 'HTTP/1.1 500 Internal Server Error';
 preg_match('/\s(\d{3})\s/', $statusLine, $matches);
 $status = isset($matches[1]) ? (int) $matches[1] : 500;
