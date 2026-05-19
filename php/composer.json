@@ -1,0 +1,17 @@
+{
+    "name": "niek-veenstra-msquad/test-clients-php",
+    "description": "PHP ping pong HTTP client",
+    "type": "project",
+    "authors": [
+        {
+            "name": "GitHub Copilot",
+            "email": "copilot@example.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "scripts": {
+        "start": "php client.php",
+        "test": "php -l client.php"
+    }
+}

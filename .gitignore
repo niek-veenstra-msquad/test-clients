@@ -1,0 +1,8 @@
+node_modules/
+bin/
+obj/
+target/
+vendor/
+__pycache__/
+*.pyc
+.DS_Store
