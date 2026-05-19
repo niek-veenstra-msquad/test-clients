@@ -1,0 +1,18 @@
+{
+  "name": "ping-pong-client-nodejs",
+  "version": "1.0.0",
+  "description": "NodeJS ping pong HTTP client",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --check index.js"
+  },
+  "keywords": [
+    "ping",
+    "pong",
+    "http",
+    "client"
+  ],
+  "author": "",
+  "license": "ISC"
+}

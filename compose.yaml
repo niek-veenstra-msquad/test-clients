@@ -1,0 +1,60 @@
+services:
+  nodejs:
+    build:
+      context: ./nodejs
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    environment:
+      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SERVER_PATH: ${SERVER_PATH:-/}
+      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+
+  java:
+    build:
+      context: ./java/ping-pong-client
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    environment:
+      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SERVER_PATH: ${SERVER_PATH:-/}
+      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+
+  python:
+    build:
+      context: ./python
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    environment:
+      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SERVER_PATH: ${SERVER_PATH:-/}
+      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+
+  dotnet:
+    build:
+      context: ./dotnet/PingPongClient
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    environment:
+      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SERVER_PATH: ${SERVER_PATH:-/}
+      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+
+  go:
+    build:
+      context: ./go
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    environment:
+      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SERVER_PATH: ${SERVER_PATH:-/}
+      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+
+  php:
+    build:
+      context: ./php
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    environment:
+      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SERVER_PATH: ${SERVER_PATH:-/}
+      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
