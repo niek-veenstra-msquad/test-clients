@@ -75,14 +75,24 @@ while (!feof($socket)) {
         exit(1);
     }
 
-    $response .= $chunk;
-
     $metadata = stream_get_meta_data($socket);
     if ($metadata['timed_out'] ?? false) {
         fclose($socket);
         fwrite(STDERR, "HTTP request failed\n");
         exit(1);
     }
+
+    if ($chunk === '') {
+        if (feof($socket)) {
+            break;
+        }
+
+        fclose($socket);
+        fwrite(STDERR, "HTTP request failed\n");
+        exit(1);
+    }
+
+    $response .= $chunk;
 }
 
 fclose($socket);
@@ -93,8 +103,15 @@ if ($response === '') {
 }
 
 $headerSeparator = strpos($response, "\r\n\r\n");
+$separatorLength = 4;
+
+if ($headerSeparator === false) {
+    $headerSeparator = strpos($response, "\n\n");
+    $separatorLength = 2;
+}
+
 $rawHeaders = $headerSeparator === false ? '' : substr($response, 0, $headerSeparator);
-$responseBody = $headerSeparator === false ? $response : substr($response, $headerSeparator + 4);
+$responseBody = $headerSeparator === false ? $response : substr($response, $headerSeparator + $separatorLength);
 $headerLines = explode("\r\n", $rawHeaders);
 $statusLine = $headerLines[0] ?? 'HTTP/1.1 500 Internal Server Error';
 preg_match('/\s(\d{3})\s/', $statusLine, $matches);
