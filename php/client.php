@@ -49,18 +49,52 @@ $request = implode("\r\n", [
     $payload,
 ]);
 
-fwrite($socket, $request);
+$bytesWritten = 0;
+$requestLength = strlen($request);
 
-$response = stream_get_contents($socket);
-$metadata = stream_get_meta_data($socket);
+while ($bytesWritten < $requestLength) {
+    $written = fwrite($socket, substr($request, $bytesWritten));
+
+    if ($written === false || $written === 0) {
+        fclose($socket);
+        fwrite(STDERR, "HTTP request failed\n");
+        exit(1);
+    }
+
+    $bytesWritten += $written;
+}
+
+$response = '';
+
+while (!feof($socket)) {
+    $chunk = fread($socket, 8192);
+
+    if ($chunk === false) {
+        fclose($socket);
+        fwrite(STDERR, "HTTP request failed\n");
+        exit(1);
+    }
+
+    $response .= $chunk;
+
+    $metadata = stream_get_meta_data($socket);
+    if ($metadata['timed_out'] ?? false) {
+        fclose($socket);
+        fwrite(STDERR, "HTTP request failed\n");
+        exit(1);
+    }
+}
+
 fclose($socket);
 
-if ($response === false || ($metadata['timed_out'] ?? false)) {
+if ($response === '') {
     fwrite(STDERR, "HTTP request failed\n");
     exit(1);
 }
 
-[$rawHeaders, $responseBody] = array_pad(explode("\r\n\r\n", $response, 2), 2, '');
+$headerSeparator = strpos($response, "\r\n\r\n");
+$rawHeaders = $headerSeparator === false ? '' : substr($response, 0, $headerSeparator);
+$responseBody = $headerSeparator === false ? $response : substr($response, $headerSeparator + 4);
 $headerLines = explode("\r\n", $rawHeaders);
 $statusLine = $headerLines[0] ?? 'HTTP/1.1 500 Internal Server Error';
 preg_match('/\s(\d{3})\s/', $statusLine, $matches);
