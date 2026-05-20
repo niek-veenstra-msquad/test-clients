@@ -1,48 +1,41 @@
-env-vars:
+x-env-vars: &env-vars
   SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
   SERVER_PORT: ${SERVER_PORT:-8080}
   SERVER_PATH: ${SERVER_PATH:-/}
   CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
 
+x-service-defaults: &service-defaults
+  platform: ${DOCKER_PLATFORM:-linux/arm64}
+  environment:
+    <<: *env-vars
+
 services:
   nodejs:
+    <<: *service-defaults
     build:
       context: ./nodejs
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    environment:
-      <<: *env-vars
 
   java:
+    <<: *service-defaults
     build:
       context: ./java/ping-pong-client
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    environment:
-      <<: *env-vars
 
   python:
+    <<: *service-defaults
     build:
       context: ./python
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    environment:
-      <<: *env-vars
 
   dotnet:
+    <<: *service-defaults
     build:
       context: ./dotnet/PingPongClient
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    environment:
-      <<: *env-vars
 
   go:
+    <<: *service-defaults
     build:
       context: ./go
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    environment:
-      <<: *env-vars
 
   php:
+    <<: *service-defaults
     build:
       context: ./php
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    environment:
-      <<: *env-vars
