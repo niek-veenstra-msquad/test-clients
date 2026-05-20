@@ -1,60 +1,48 @@
+env-vars:
+  SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
+  SERVER_PORT: ${SERVER_PORT:-8080}
+  SERVER_PATH: ${SERVER_PATH:-/}
+  CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+
 services:
   nodejs:
     build:
       context: ./nodejs
     platform: ${DOCKER_PLATFORM:-linux/arm64}
     environment:
-      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
-      SERVER_PORT: ${SERVER_PORT:-8080}
-      SERVER_PATH: ${SERVER_PATH:-/}
-      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+      <<: *env-vars
 
   java:
     build:
       context: ./java/ping-pong-client
     platform: ${DOCKER_PLATFORM:-linux/arm64}
     environment:
-      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
-      SERVER_PORT: ${SERVER_PORT:-8080}
-      SERVER_PATH: ${SERVER_PATH:-/}
-      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+      <<: *env-vars
 
   python:
     build:
       context: ./python
     platform: ${DOCKER_PLATFORM:-linux/arm64}
     environment:
-      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
-      SERVER_PORT: ${SERVER_PORT:-8080}
-      SERVER_PATH: ${SERVER_PATH:-/}
-      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+      <<: *env-vars
 
   dotnet:
     build:
       context: ./dotnet/PingPongClient
     platform: ${DOCKER_PLATFORM:-linux/arm64}
     environment:
-      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
-      SERVER_PORT: ${SERVER_PORT:-8080}
-      SERVER_PATH: ${SERVER_PATH:-/}
-      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+      <<: *env-vars
 
   go:
     build:
       context: ./go
     platform: ${DOCKER_PLATFORM:-linux/arm64}
     environment:
-      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
-      SERVER_PORT: ${SERVER_PORT:-8080}
-      SERVER_PATH: ${SERVER_PATH:-/}
-      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+      <<: *env-vars
 
   php:
     build:
       context: ./php
     platform: ${DOCKER_PLATFORM:-linux/arm64}
     environment:
-      SERVER_HOST: ${SERVER_HOST:-127.0.0.1}
-      SERVER_PORT: ${SERVER_PORT:-8080}
-      SERVER_PATH: ${SERVER_PATH:-/}
-      CLIENT_MESSAGE: ${CLIENT_MESSAGE:-ping}
+      <<: *env-vars
