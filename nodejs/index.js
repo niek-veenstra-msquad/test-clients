@@ -30,9 +30,8 @@ async function main() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Client-Language": "nodejs",
     },
-    body: JSON.stringify({ message }),
+    body: JSON.stringify({ message, clientLanguage: "nodejs" }),
     signal: AbortSignal.timeout(10_000),
   });
 

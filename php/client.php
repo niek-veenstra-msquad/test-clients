@@ -24,11 +24,11 @@ if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
     exit(1);
 }
 
-$payload = json_encode(['message' => $message], JSON_THROW_ON_ERROR);
+$payload = json_encode(['message' => $message, 'clientLanguage' => 'php'], JSON_THROW_ON_ERROR);
 $context = stream_context_create([
     'http' => [
         'method' => 'POST',
-        'header' => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\nClient-Language: php\r\n",
+        'header' => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\n",
         'content' => $payload,
         'ignore_errors' => true,
         'timeout' => 10,

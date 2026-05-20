@@ -13,7 +13,8 @@ import (
 )
 
 type requestBody struct {
-	Message string `json:"message"`
+	Message        string `json:"message"`
+	ClientLanguage string `json:"clientLanguage"`
 }
 
 func normalizePath(path string) string {
@@ -36,7 +37,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	payload, err := json.Marshal(requestBody{Message: message})
+	payload, err := json.Marshal(requestBody{Message: message, ClientLanguage: "go"})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
@@ -50,7 +51,6 @@ func main() {
 	}
 
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("Client-Language", "go")
 
 	response, err := client.Do(request)
 	if err != nil {

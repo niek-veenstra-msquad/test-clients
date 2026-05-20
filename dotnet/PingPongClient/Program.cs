@@ -19,9 +19,8 @@ using var httpClient = new HttpClient
     Timeout = TimeSpan.FromSeconds(10),
 };
 
-var payload = JsonSerializer.Serialize(new { message });
+var payload = JsonSerializer.Serialize(new { message, clientLanguage = "dotnet" });
 using var content = new StringContent(payload, Encoding.UTF8, "application/json");
-content.Headers.Add("Client-Language", "dotnet");
 using var response = await httpClient.PostAsync($"http://{host}:{port}{path}", content);
 var body = await response.Content.ReadAsStringAsync();
 
