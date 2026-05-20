@@ -26,7 +26,7 @@ def main() -> int:
     request = urllib.request.Request(
         f"http://{host}:{port}{path}",
         data=json.dumps({"message": message}).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", "Client-Language": "python"},
         method="POST",
     )
 

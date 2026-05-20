@@ -50,6 +50,7 @@ func main() {
 	}
 
 	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Client-Language", "go")
 
 	response, err := client.Do(request)
 	if err != nil {

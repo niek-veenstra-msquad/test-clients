@@ -28,7 +28,7 @@ $payload = json_encode(['message' => $message], JSON_THROW_ON_ERROR);
 $context = stream_context_create([
     'http' => [
         'method' => 'POST',
-        'header' => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\n",
+        'header' => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\nClient-Language: php\r\n",
         'content' => $payload,
         'ignore_errors' => true,
         'timeout' => 10,

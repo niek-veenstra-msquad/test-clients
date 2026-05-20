@@ -32,6 +32,7 @@ public final class App {
             .uri(URI.create("http://" + host + ":" + port + path))
             .timeout(Duration.ofSeconds(10))
             .header("Content-Type", "application/json")
+            .header("Client-Language", "java")
             .POST(HttpRequest.BodyPublishers.ofString("{\"message\":\"" + escapeJson(message) + "\"}"))
             .build();
 
